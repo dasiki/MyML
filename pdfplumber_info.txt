@@ -1,0 +1,25 @@
+Name: pdfplumber
+Version: 0.5.16
+Summary: Plumb a PDF for detailed information about each char, rectangle, and line.
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Location: c:\users\86150\appdata\local\programs\python\python36\lib\site-packages
+Requires: wand, unicodecsv, pycryptodome, six, pillow, chardet, pdfminer.six
+Required-by: 
+
+
+import pdfplumber
+import pandas as pd
+
+with pdfplumber.open("CN_FCAGBILLDET_0832996_20200205.PDF") as pdf:
+    first_page = pdf.pages[1]
+#     first_page.extract_tables
+    # 获取文本，直接得到字符串，包括了换行符【与PDF上的换行位置一致，而不是实际的“段落”】
+    print(first_page.chars[0]) 
+    # 获取本页全部表格，也可以使用extract_table()获得单个表格
+    for table in first_page.extract_tables(): 
+        #得到的table是嵌套list类型，转化成DataFrame更加方便查看和分析 
+        df = pd.DataFrame(table[1:], columns=table[0]) 
+        print(df)
